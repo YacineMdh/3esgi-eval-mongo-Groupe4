@@ -60,6 +60,7 @@ exports.update = async (req, res) => {
  * @param id l'id du commentaire à supprimer
  */
 exports.delete = async (req, res) => {
+    if (!req.params.id) return res.status(400).send({ message: "ID_REQUIRED" });
     try{
         let comment = await Comment.findByIdAndDelete(req.params.id)
         if (!comment) return res.status(404).json({ message: "COMMENT_NOT_FOUND" });
