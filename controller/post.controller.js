@@ -38,7 +38,7 @@ exports.getById = async (req,res) => {
  */
 exports.create = async (req,res) => {
     try{
-        Post.create({
+        let post = await Post.create({
             message: req.body.message,
             userId: req.body.userId 
           })
@@ -56,9 +56,19 @@ exports.create = async (req,res) => {
  *     message: <string>
  * }
  */
-exports.update = async () => {
-    try{
-        //TODO
+exports.update = async (req,res) => {
+    const updatedData = {
+        message: req.body.message,
+        userId: req.body.userId 
+      };
+
+    try {
+        let result = await Post.findByIdAndUpdate(req.params.id, updatedData)
+
+        if(result == null) {
+            res.status(405).send("user not found")
+        }
+
         res.status(201).json({message: "Post mis à jour"});
     }catch(e){
         res.status(500).json(e.message);
