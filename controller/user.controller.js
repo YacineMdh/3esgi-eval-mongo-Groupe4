@@ -11,11 +11,11 @@ const bcrypt = require("bcrypt");
  */
 exports.login = async (req, res) => {
     try {
-        let user = await User.findOne({ where: { email: req.body.email } });
+        let user = await User.find({ "login": req.body.login });
         if (!user) {
             return res.status(404).json("User not found");
         }
-        let validPassword = await bcrypt.compare(req.body.password, user.password);
+        let validPassword = await bcrypt.compareSync(req.body.password,user.password);
         if (!validPassword) {
             return res.status(401).json({ message: "Incorrect password" });
         }
