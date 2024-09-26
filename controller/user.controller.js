@@ -11,9 +11,15 @@ const bcrypt = require("bcrypt");
  */
 exports.login = async (req,res) => {
     try{
-        let user = await User.findByEmail(req.body.email);
+        let user = await User.find({where:{login:req.body.login}});
+        if (!user)
+            return res.status(404).json("User not found");
         res.status(200).json(user);
-    }catch(e){
+        let validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Error password" });
+    }}
+    catch(e){
         res.status(500).json(e.message);
     }
 }
