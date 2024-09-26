@@ -8,9 +8,18 @@ const Post = require("./../model/post.model");
  * ...
  */
 exports.getAll = async (req,res) => {
+    let page = req.params.page
     try{
-        let listPost = await Post.find() 
-        res.status(200).json(listPost);
+        if (page == 1 ) {
+            let listPost = await Post.find().sort({ creationDate: 1 }).limit(10)
+            res.status(200).json(listPost);
+        }
+        else {
+            let listPost = await Post.find().sort({ creationDate: 1 }).skip((page-1)*10).limit(10)
+            res.status(200).json(listPost);
+        }
+        
+       
     }catch(e){
         res.status(500).json(e.message);
     }
@@ -40,7 +49,7 @@ exports.create = async (req,res) => {
     try{
         let post = await Post.create({
             message: req.body.message,
-            userId: req.body.userId 
+            userId: req.body.userId ,
           })
         res.status(201).json(post);
     }catch(e){
