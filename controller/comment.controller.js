@@ -12,7 +12,17 @@ const Comment = require("./../model/comment.model");
  */
 exports.create = async (req, res) => {
     try{
-        let comment = await Comment.create(req.body);
+        const { message, userId, postId } = req.body;
+
+        if (!message) return res.status(400).send({ message: "MESSAGE_REQUIRED" });
+        if (!userId) return res.status(400).send({ message: "USERID_REQUIRED" });
+        if (!postId) return res.status(400).send({ message: "POSTID_REQUIRED" });
+
+        let comment = await Comment.create({
+            message,
+            userId,
+            postId
+        });
         res.status(201).json(comment);
     }catch(e){
         res.status(500).json(e.message);
@@ -29,6 +39,9 @@ exports.create = async (req, res) => {
  */
 exports.update = async (req, res) => {
     try{
+        if (!req.params.id) return res.status(400).json({ message: "ID_REQUIRED" })
+        if (!req.body.message) return res.status(400).json({ message: "MESSAGE_REQUIRED" });
+
         const comment = await Comment.findOneAndUpdate(
             { _id: req.params.id },
             { $set: { message: req.body.message } },
