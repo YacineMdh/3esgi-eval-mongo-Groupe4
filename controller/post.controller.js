@@ -83,14 +83,10 @@ exports.update = async (req,res) => {
     if (!message) return res.status(400).send({ message: "MESSAGE_REQUIRED" });
     if (!userId) return res.status(400).send({ message: "USERID_REQUIRED" });
 
-    const updatedData = {
-        message: message,
-        userId: userId ,
-        creationDate: new Date() 
-      };
-
+  
     try {
-        let result = await Post.findByIdAndUpdate(req.params.id, updatedData)
+        let result = await Post.findByIdAndUpdate( { _id: req.params.id },
+            { $set: {...req.body } })
 
         if(result == null) {
             res.status(405).send("user not found")
