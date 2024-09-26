@@ -79,10 +79,11 @@ exports.update = async (req,res) => {
  * Methode pour supprimer un post (attention de bien supprimer les commentaires associés)
  * @param id l'id du post à supprimer
  */
-exports.delete = async () => {
+exports.delete = async (req,res) => {
     try{
-        //TODO
-        res.status(200).json({message: "Post supprimé"});
+        let id = req.params.id
+        let result = await Post.deleteOne({"_id":id})
+        res.status(200).send(result);
     }catch(e){
         res.status(500).json(e.message);
     }
