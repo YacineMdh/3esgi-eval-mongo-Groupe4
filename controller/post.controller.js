@@ -9,7 +9,7 @@ const Post = require("./../model/post.model");
  */
 exports.getAll = async () => {
     try{
-        //TODO
+        let result = await 
         res.status(200).json(listPost);
     }catch(e){
         res.status(500).json(e.message);

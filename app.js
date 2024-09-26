@@ -14,6 +14,9 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/', (req,res)=>{
+    res.send("hello world")
+});
 app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.use('/comment', commentRoute);

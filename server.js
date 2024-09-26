@@ -14,6 +14,7 @@ const server = http.createServer(app);
 server.on("error", errorHandler);
 server.on("listening", () => {
     console.log("serveur en route ");
+    console.log(`Server is running on http://localhost:${port}`);
 });
 
 server.listen(port);
