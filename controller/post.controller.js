@@ -31,7 +31,9 @@ exports.getAll = async (req,res) => {
  */
 exports.getById = async (req,res) => {
     try{
-        let postWithComment = await Post.findById(req.params.id).populate("comments");
+        let id = req.params.id
+        let result = await Post.findById(id)
+        result = await Comment.find({"postId":id})
         res.status(200).json(postWithComment);
     }catch(e){
         res.status(500).json(e.message);
