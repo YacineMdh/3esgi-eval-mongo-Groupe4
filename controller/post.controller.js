@@ -1,4 +1,5 @@
 const Post = require("./../model/post.model");
+const Comment = require("./../model/comment.model");
 
 /**
  * Methode pour récupérer 10 post (les plus récents) par page
@@ -68,7 +69,8 @@ exports.create = async (req,res) => {
 exports.update = async (req,res) => {
     const updatedData = {
         message: req.body.message,
-        userId: req.body.userId 
+        userId: req.body.userId ,
+        creationDate: new Date() 
       };
 
     try {
@@ -92,6 +94,7 @@ exports.delete = async (req,res) => {
     try{
         let id = req.params.id
         let result = await Post.deleteOne({"_id":id})
+        result = await Comment.deleteMany({"postId":id})
         res.status(200).send(result);
     }catch(e){
         res.status(500).json(e.message);
