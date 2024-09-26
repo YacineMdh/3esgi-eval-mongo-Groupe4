@@ -3,6 +3,7 @@ const userRoute = require("./route/user.route");
 const postRoute = require("./route/post.route");
 const commentRoute = require("./route/comment.route");
 
+
 const app = express();
 
 app.use(express.json());
@@ -14,9 +15,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/', (req,res)=>{
-    res.send("hello world")
-});
+
 app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.use('/comment', commentRoute);

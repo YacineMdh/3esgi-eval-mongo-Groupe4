@@ -7,9 +7,9 @@ const Post = require("./../model/post.model");
  * Si la page est 2 il faut récupérer les post du 11ème au 20ème les plus récents
  * ...
  */
-exports.getAll = async () => {
+exports.getAll = async (req,res) => {
     try{
-        let result = await 
+        let listPost = await Post.find() 
         res.status(200).json(listPost);
     }catch(e){
         res.status(500).json(e.message);
