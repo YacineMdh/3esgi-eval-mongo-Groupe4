@@ -1,3 +1,4 @@
+const User = require("../model/user.model");
 const Comment = require("./../model/comment.model");
 
 /**
@@ -9,9 +10,9 @@ const Comment = require("./../model/comment.model");
  *     postId: <string>
  * }
  */
-exports.create = async () => {
+exports.create = async (req, res) => {
     try{
-        //TODO
+        let comment = await Comment.create(req.body);
         res.status(201).json(comment);
     }catch(e){
         res.status(500).json(e.message);
@@ -26,9 +27,15 @@ exports.create = async () => {
  *     message: <string>,
  * }
  */
-exports.update = async () => {
+exports.update = async (req, res) => {
     try{
-        //TODO
+        const comment = await Comment.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: { message: req.body.message } },
+            { new: true, runValidators: true }
+        );
+
+        if (!comment) return res.status(404).json({ message: 'COMMENT_NOT_FOUND'});
         res.status(200).json({message: "Commentaire mis à jour"});
     }catch(e){
         res.status(500).json(e.message);
@@ -39,9 +46,11 @@ exports.update = async () => {
  * Méthode pour supprimer un commentaire
  * @param id l'id du commentaire à supprimer
  */
-exports.delete = async () => {
+exports.delete = async (req, res) => {
     try{
-        //TODO
+        let comment = await Comment.findByIdAndDelete(req.params.id)
+        if (!comment) return res.status(404).json({ message: "COMMENT_NOT_FOUND" });
+
         res.status(200).json({message: "Commentaire supprimé"});
     }catch(e){
         res.status(500).json(e.message);
