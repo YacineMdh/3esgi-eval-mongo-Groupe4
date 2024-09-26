@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
  */
 exports.login = async (req, res) => {
     try {
-        let user = await User.find({ "login": req.body.login });
+        let user = await User.findOne({ "login": req.body.login });
         if (!user) {
             return res.status(404).json("User not found");
         }
