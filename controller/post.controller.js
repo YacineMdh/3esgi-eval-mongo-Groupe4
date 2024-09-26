@@ -19,9 +19,9 @@ exports.getAll = async (req,res) => {
 /**
  * Methode pour récupérer un post par son id, et les commentaires associés à ce post
  */
-exports.getById = async () => {
+exports.getById = async (req,res) => {
     try{
-        //TODO
+        let postWithComment = await Post.findById(req.params.id)
         res.status(200).json(postWithComment);
     }catch(e){
         res.status(500).json(e.message);
@@ -36,9 +36,12 @@ exports.getById = async () => {
  *     userId: <string>
  * }
  */
-exports.create = async () => {
+exports.create = async (req,res) => {
     try{
-        //TODO
+        Post.create({
+            message: req.body.message,
+            userId: req.body.userId 
+          })
         res.status(201).json(post);
     }catch(e){
         res.status(500).json(e.message);
