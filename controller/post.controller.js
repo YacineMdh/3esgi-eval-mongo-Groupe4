@@ -32,8 +32,13 @@ exports.getAll = async (req,res) => {
 exports.getById = async (req,res) => {
     try{
         let id = req.params.id
-        let result = await Post.findById(id)
-        result = await Comment.find({"postId":id})
+        let _post = await Post.findOne({"_id":id})
+        let _comments = await Comment.find({"postId":id})
+        let result = {
+            post: _post, 
+            comments: _comments
+        };
+
         res.status(200).json(result);
     }catch(e){
         res.status(500).json(e.message);

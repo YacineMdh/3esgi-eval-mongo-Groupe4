@@ -9,8 +9,8 @@ const { Schema, SchemaTypes, model } = require('mongoose');
 const Comment = new Schema({
     message: { type: SchemaTypes.String, required: true },
     date: { type: SchemaTypes.Date, default: new Date() },
-    userId: { type: SchemaTypes.ObjectId, required: true },
-    postId: { type: SchemaTypes.ObjectId, required: true }
+    userId: { type: String, required: true },
+    postId: { type: String, required: true }
 })
 
 module.exports = model('comment', Comment);
