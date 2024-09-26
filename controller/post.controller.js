@@ -10,6 +10,7 @@ const Comment = require("./../model/comment.model");
  */
 exports.getAll = async (req,res) => {
     let page = req.params.page
+    if (!page) return res.status(400).send({ message: "PAGE_REQUIRED" });
     try{
         if (page == 1 ) {
             let listPost = await Post.find().sort({ creationDate: 1 }).limit(10)
@@ -30,6 +31,7 @@ exports.getAll = async (req,res) => {
  * Methode pour récupérer un post par son id, et les commentaires associés à ce post
  */
 exports.getById = async (req,res) => {
+    if (!req.params.id) return res.status(400).send({ message: "ID_REQUIRED" });
     try{
         let id = req.params.id
         let result = await Post.findById(id)
@@ -49,6 +51,9 @@ exports.getById = async (req,res) => {
  * }
  */
 exports.create = async (req,res) => {
+    const { message, userId } = req.body;
+    if (!message) return res.status(400).send({ message: "MESSAGE_REQUIRED" });
+    if (!userId) return res.status(400).send({ message: "USERID_REQUIRED" });
     try{
         let post = await Post.create({
             message: req.body.message,
@@ -69,9 +74,13 @@ exports.create = async (req,res) => {
  * }
  */
 exports.update = async (req,res) => {
+    const { message, userId } = req.body;
+    if (!message) return res.status(400).send({ message: "MESSAGE_REQUIRED" });
+    if (!userId) return res.status(400).send({ message: "USERID_REQUIRED" });
+
     const updatedData = {
-        message: req.body.message,
-        userId: req.body.userId ,
+        message: message,
+        userId: userId ,
         creationDate: new Date() 
       };
 
@@ -93,10 +102,12 @@ exports.update = async (req,res) => {
  * @param id l'id du post à supprimer
  */
 exports.delete = async (req,res) => {
+    const { id } = req.params;
+    if (!id) return res.status("ID_REQUIRED");
+
     try{
-        let id = req.params.id
-        let result = await Post.deleteOne({"_id":id})
-        result = await Comment.deleteMany({"postId":id})
+        let result = await Post.deleteOne({"_id": id})
+        result = await Comment.deleteMany({"postId": id})
         res.status(200).send(result);
     }catch(e){
         res.status(500).json(e.message);
