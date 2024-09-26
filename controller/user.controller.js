@@ -9,20 +9,21 @@ const bcrypt = require("bcrypt");
  *     password: <string>
  * }
  */
-exports.login = async (req,res) => {
-    try{
-        let user = await User.find({where:{login:req.body.login}});
-        if (!user)
+exports.login = async (req, res) => {
+    try {
+        let user = await User.findOne({ where: { email: req.body.email } });
+        if (!user) {
             return res.status(404).json("User not found");
-        res.status(200).json(user);
-        let validPassword = await bcrypt.compare(password, user.password);
+        }
+        let validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) {
-            return res.status(401).json({ message: "Error password" });
-    }}
-    catch(e){
-        res.status(500).json(e.message);
+            return res.status(401).json({ message: "Incorrect password" });
+        }
+        res.status(200).json(user);
+    } catch (e) {
+        res.status(500).json({ message: e.message });
     }
-}
+};
 
 /**
  * Méthode pour la création d'un compte utilisateur
