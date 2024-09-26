@@ -34,7 +34,7 @@ exports.getById = async (req,res) => {
         let id = req.params.id
         let result = await Post.findById(id)
         result = await Comment.find({"postId":id})
-        res.status(200).json(postWithComment);
+        res.status(200).json(result);
     }catch(e){
         res.status(500).json(e.message);
     }
